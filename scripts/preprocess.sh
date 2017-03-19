@@ -8,8 +8,10 @@ problemset="./inputs/ipc6.pset"
 # Planner: -P (planner location)
 planner="./fast-downward.py"
 
+remove="false"
+
 # Parse command line args
-while [[ $# -gt 1 ]]
+while [[ $# -gt 0 ]]
 do
     key="$1"
 
@@ -21,6 +23,10 @@ do
 	-P|--planner)
 	    planner="$2"
 	    shift
+	    ;;
+	-r|--remove)
+	    remove="true"
+	    echo $remove
 	    ;;
 	*)
             echo "Unknown option: $key"
@@ -40,17 +46,24 @@ do
     pfile="./inputs/problems/$competition/seq-sat/$domain/$problem.pddl"
     dfile="./inputs/problems/$competition/seq-sat/$domain/${problem}-domain.pddl"
     ofile="./inputs/problems/$competition/seq-sat/$domain/$problem.out"
-    
-    if [ ! -e "$dfile" ]
+
+    if [ "$remove" == "true" ]
     then
-	dfile="./inputs/problems/$competition/seq-sat/$domain/domain.pddl"
-    fi
-    
-    if [ ! -e "$pfile" ]
-    then
-	echo ERROR: Problem file missing: $pfile
+	rm "$ofile"
     else
-        $planner --translate --preprocess "$dfile" "$pfile"
-	mv "./output" "$ofile"
+	
+	if [ ! -e "$dfile" ]
+	then
+	    dfile="./inputs/problems/$competition/seq-sat/$domain/domain.pddl"
+	fi
+	
+	if [ ! -e "$pfile" ]
+	then
+	    echo ERROR: Problem file missing: $pfile
+	else
+            $planner --translate --preprocess "$dfile" "$pfile"
+	    mv "./output" "$ofile"
+	fi
+
     fi
 done

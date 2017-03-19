@@ -1,0 +1,17 @@
+competition  domain              problem  hlb      sol  src      best     sbest    newbest
+ipc6         elevators-strips    p01      52       1    52       52       56       52
+ipc6         elevators-strips    p02      53       1    53       53       54       53
+ipc6         openstacks-strips   p10      4        1    4        4        5        4
+ipc6         openstacks-strips   p11      5        1    5        5        6        5
+ipc6         parcprinter-strips  p25      1215839  1    1215839  1215839  1226037  1215839
+ipc6         parcprinter-strips  p26      1216462  1    1216462  1216462  1305956  1216462
+ipc6         pegsol-strips       p20      7        1    7        7        8        7
+ipc6         pegsol-strips       p21      8        1    8        8        9        8
+ipc6         scanalyzer-strips   p05      30       1    30       30       32       30
+ipc6         scanalyzer-strips   p07      30       1    30       30       32       30
+ipc6         sokoban-strips      p16      33       1    33       33       35       33
+ipc6         sokoban-strips      p17      23       1    23       23       27       23
+ipc6         transport-strips    p12      795      1    795      795      800      795
+ipc6         transport-strips    p22      675      1    675      675      679      675
+ipc6         woodworking-strips  p02      255      1    255      255      265      255
+ipc6         woodworking-strips  p22      205      1    205      205      225      205

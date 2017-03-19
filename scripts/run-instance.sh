@@ -40,7 +40,7 @@ problem="p01"
 planner="./fast-downward.py"
 
 # Parse command line args
-while [[ $# -gt 1 ]]
+while [[ $# -gt 0 ]]
 do
 key="$1"
 
