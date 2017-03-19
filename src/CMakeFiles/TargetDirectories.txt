@@ -1,0 +1,9 @@
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/CMakeFiles/edit_cache.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/CMakeFiles/rebuild_cache.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/CMakeFiles/translate.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/preprocess/CMakeFiles/edit_cache.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/preprocess/CMakeFiles/rebuild_cache.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/preprocess/CMakeFiles/preprocess.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/search/CMakeFiles/edit_cache.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/search/CMakeFiles/rebuild_cache.dir
+/media/Documents/University/ANU/SRS/Implementation/fd-ipfpdb/src/search/CMakeFiles/downward.dir
