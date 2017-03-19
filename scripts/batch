@@ -1,0 +1,115 @@
+#!/bin/bash
+
+# Input a number of threads, and a list of commands.
+# This script will execute one command on each of the threads concurrently.
+# When a command finishes, the next command is taken from the list.
+# When the end of the list is reached, this script exits.
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+main() {
+    tmpdir=$(mktemp -dt "$(basename $0).XXXXXXXXXX")
+
+    scriptname="$0"
+
+    num_threads=1
+    first_jid=1
+    last_jid=-1
+
+    while [[ $# -ge 1 ]]
+    do
+	key="$1"
+	case $key in
+	    -t|--threads)
+		shift
+		num_threads="$1"
+		;;
+	    -j|--from-jid)
+		shift
+		first_jid="$1"
+		;;
+	    -l|--to-jid)
+		shift
+		last_jid="$1"
+		;;
+	    -h|--help)
+	        echo "
+Input a number of threads and a list of commands, and this script will execute one command on each of the threads concurrently.
+When a command finishes, the next command is taken from the list.
+When the end of the list is reached, this script exits.
+
+Usage: $scriptname [-t <number> -j <number> -l <number> -h] \"COMMAND1\" \"COMMAND2\" ...
+
+Inputs:"
+		echo "   -t|--threads * <number> * The number of threads (1 by default)
+   -j|--from-jid * <number> * The list index to start iterating from (1 by default)
+   -l|--to-jid * <number> * The list index to stop iterating at (size of list by default)
+   -h|--help * * Display this help message" | column -t -s "*"
+		echo ""
+
+		;;
+	    *)
+		tasks=("${@}")
+		break
+		;;
+	esac
+	shift
+    done
+
+    jid_file="$tmpdir/jid"
+    echo $first_jid > "$jid_file"
+    
+    num_tasks=${#tasks[*]}
+    if [ "$last_jid" == -1 ] || [ "$last_jid" -gt "$num_tasks" ]
+    then
+	last_jid="$num_tasks"
+    fi
+    num_tasks=$((1 + last_jid - first_jid ))
+
+    trap "cleanup" SIGINT SIGTERM EXIT
+
+    for tid in $(seq 1 $num_threads); do
+	if [ "$tid" -le "$num_tasks" ]
+	then
+            thread $tid &
+	    pid[$tid-1]=$!
+	fi
+    done
+    
+    wait
+    echo "done"
+}
+
+thread() {
+    tid=$1
+    pid=$BASHPID
+    for (( jid=$(read_and_inc "$jid_file");
+	   $jid <= $last_jid;
+	   jid=$(read_and_inc "$jid_file") ))
+    do
+	task=${tasks[$jid-1]}
+	printf "${RED}t[$tid]${NC}@$pid + ${GREEN}j[$jid]${NC}:\n  $task\n"
+	eval $task
+	printf "${RED}t[$tid]${NC}@$pid - ${GREEN}j[$jid]${NC}\n"
+    done
+    printf "${RED}t[$tid]${NC}@$pid .\n"
+}
+
+read_and_inc() {
+    (
+	flock -x 200
+	i=$(cat "$1")
+	echo $((i+1)) > "$1"
+	echo $i
+    ) 200<"$1"
+}
+
+cleanup() {
+    rm -rf "$tmpdir"
+    trap - SIGINT EXIT
+    kill -s SIGINT 0
+}
+
+main "$@"
